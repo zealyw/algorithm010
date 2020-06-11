@@ -16,7 +16,8 @@
 
 
 //leetcode submit region begin(Prohibit modification and deletion)
-class Solution {
+class Solution
+{
 
     /**
      * @param Integer[] $nums
@@ -26,22 +27,26 @@ class Solution {
 
         //循环一次数组，所有循环的元素非0的元素在前，0元素跟在后面
         //设置一个变量来记已循环0元素里第一个的index，发现遍历到的元素不是0的时候就与第一个0元素交换位置，然后第一个零元素的位置后移
-        //复杂度为O(n)循环遍历一次数组
+        //方案1:复杂度为O(n)循环遍历一次数组
         $firstZeroIndex = -1;
-        for($i=0;$i<count($nums);$i++){
+        for ($i = 0; $i < count($nums); $i++) {
             $firstZeroIndex == -1 && $nums[$i] == 0 && $firstZeroIndex = $i;
-            if ($firstZeroIndex != -1 && $nums[$i] != 0){
+            if ($firstZeroIndex != -1 && $nums[$i] != 0) {
                 $nums[$firstZeroIndex++] = $nums[$i];
                 $nums[$i] = 0;
             }
         }
-        /*
-        //使用PHP的函数来做的话1.获取元素有多少个0 2.过滤掉数组的0 3.补充原有个数的0
-        $numsCount = count($nums);
-        $nums = array_filter($nums);
-        $filterNumsCount = count($nums);
-        $numsCount-$filterNumsCount >0 && $nums = array_merge($nums,array_fill(0,$numsCount-$filterNumsCount,0));
-        */
+
+
+        /**************************************************************
+         * //使用PHP的函数来做的话1.获取元素有多少个0 2.过滤掉数组的0 3.补充原有个数的0
+         * $numsCount = count($nums);
+         * $nums = array_filter($nums);
+         * $filterNumsCount = count($nums);
+         * $numsCount-$filterNumsCount >0 && $nums = array_merge($nums,array_fill(0,$numsCount-$filterNumsCount,0));
+         **************************************************************/
+
+
         return true;
     }
 }

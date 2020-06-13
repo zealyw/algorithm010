@@ -28,6 +28,17 @@ class Solution {
      * @return ListNode
      */
     function swapPairs($head) {
+
+        //递归法
+        if($head == null || $head->next  == null){
+            return $head;
+        }
+        $next = $head->next;
+        $head->next = $this->swapPairs($head->next->next);
+        $next->next = $head;
+        return $next;
+
+        //迭代法
         if($head == null || $head->next == null){
             return $head;
         }

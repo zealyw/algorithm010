@@ -1,0 +1,117 @@
+//给定两个单词（beginWord 和 endWord）和一个字典 wordList，找出所有从 beginWord 到 endWord 的最短转换序列。转换
+//需遵循如下规则：
+//
+//
+// 每次转换只能改变一个字母。
+// 转换后得到的单词必须是字典中的单词。
+//
+//
+// 说明:
+//
+//
+// 如果不存在这样的转换序列，返回一个空列表。
+// 所有单词具有相同的长度。
+// 所有单词只由小写字母组成。
+// 字典中不存在重复的单词。
+// 你可以假设 beginWord 和 endWord 是非空的，且二者不相同。
+//
+//
+// 示例 1:
+//
+// 输入:
+//beginWord = "hit",
+//endWord = "cog",
+//wordList = ["hot","dot","dog","lot","log","cog"]
+//
+//输出:
+//[
+//  ["hit","hot","dot","dog","cog"],
+//  ["hit","hot","lot","log","cog"]
+//]
+//
+//
+// 示例 2:
+//
+// 输入:
+//beginWord = "hit"
+//endWord = "cog"
+//wordList = ["hot","dot","dog","lot","log"]
+//
+//输出: []
+//
+//解释: endWord "cog" 不在字典中，所以不存在符合要求的转换序列。
+// Related Topics 广度优先搜索 数组 字符串 回溯算法
+
+package main
+
+func main() {
+	findLadders("hit", "cog", []string{"hot", "dot", "dog", "lot", "log", "cog"})
+}
+
+//leetcode submit region begin(Prohibit modification and deletion)
+func findLadders(beginWord string, endWord string, wordList []string) [][]string {
+	if idxof(endWord, wordList) == -1 {
+		return [][]string{}
+	}
+	var queue [][]string
+	queue = append(queue, []string{beginWord})
+	visited := make(map[string]bool)
+	endFlag := false
+	copyWordList := make([]string, len(wordList))
+	copy(copyWordList, wordList)
+	for len(queue) > 0 && !endFlag {
+		l := len(queue)
+		for i := 0; i < l; i++ {
+			lastWord := queue[i][len(queue[i])-1]
+			for j := 0; j < len(copyWordList); j++ {
+				if hasOneDiff(lastWord, copyWordList[j]) {
+					if copyWordList[j] == endWord {
+						endFlag = true
+					}
+					newPath := append([]string{}, queue[i]...)
+					newPath = append(newPath, copyWordList[j])
+					queue = append(queue, newPath)
+					visited[copyWordList[j]] = true
+				}
+			}
+		}
+		var newWordList []string
+		for i := 0; i < len(copyWordList); i++ {
+			if !visited[copyWordList[i]] {
+				newWordList = append(newWordList, copyWordList[i])
+			}
+		}
+		copyWordList = newWordList
+		queue = queue[l:]
+	}
+	var result [][]string
+	for _, v := range queue {
+		if v[len(v)-1] == endWord {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+func idxof(targetWord string, wordList []string) int {
+	for idx, word := range wordList {
+		if word == targetWord {
+			return idx
+		}
+	}
+	return -1
+}
+
+func hasOneDiff(x string, y string) bool {
+	count := 0
+	for i := 0; i < len(x); i++ {
+		if x[i] != y[i] {
+			count++
+			if count > 1 {
+				return false
+			}
+		}
+	}
+	return count == 1
+}
+
+//leetcode submit region end(Prohibit modification and deletion)
